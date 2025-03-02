@@ -1,96 +1,112 @@
-# legacy-paystream
+# PayStream
 
-## Getting Started
+A Solana smart contract for automated, secure payment workflows with multi-signature approval requirements.
+
+## Overview
+
+PayStream is a decentralized application built on the Solana blockchain that enables automated, recurring payments with configurable approval workflows. It allows users to create payment streams that require multiple approvals before executing, providing an additional layer of security and governance for financial transactions.
+
+## Features
+
+- **Secure Payment Workflows**: Create payment streams with funds held in escrow until all conditions are met
+- **Multi-signature Approval**: Configure multiple approvers required for payment execution
+- **Recurring Payments**: Set intervals for automated, recurring payments
+- **Cancellation Option**: Cancel workflows and return funds to the creator at any time
+- **SPL Token Integration**: Compatible with SPL tokens (e.g., USDC) for diverse payment options
+
+## Smart Contract Architecture
+
+The PayStream smart contract consists of the following main components:
+
+1. **Payment Workflow Initialization**: Creates a new workflow with specified parameters
+2. **Approval Handling**: Manages approvals from authorized approvers
+3. **Payment Execution**: Processes payments when due and approved
+4. **Workflow Cancellation**: Allows creators to cancel workflows and recover funds
+
+## Technical Implementation
+
+The contract is built using Anchor framework, which simplifies Solana program development. Key technical aspects include:
+
+- Program Derived Addresses (PDAs) for secure fund management
+- Associated Token Accounts for SPL token operations
+- Proper authorization checks for all sensitive operations
+- Time-based payment execution logic
+
+## Installation and Usage
 
 ### Prerequisites
 
-- Node v18.18.0 or higher
+- Solana CLI tools
+- Node.js and npm/yarn
+- Anchor framework
 
-- Rust v1.77.2 or higher
-- Anchor CLI 0.30.1 or higher
-- Solana CLI 1.18.17 or higher
+### Building the Project
 
-### Installation
+```bash
+# Install dependencies
+yarn install
 
-#### Clone the repo
+# Build the program
+anchor build
 
-```shell
-git clone <repo-url>
-cd <repo-name>
+# Deploy to your preferred Solana cluster
+anchor deploy
 ```
 
-#### Install Dependencies
+### Testing
 
-```shell
-pnpm install
+The project includes comprehensive tests that demonstrate the functionality:
+
+```bash
+# Start a local Solana validator
+solana-test-validator
+
+# Run the test suite
+anchor test
 ```
 
-#### Start the web app
+## API Reference
 
-```
-pnpm dev
-```
+### Main Instructions
 
-## Apps
+#### Initialize Workflow
 
-### anchor
+Creates a new payment workflow with the specified parameters:
 
-This is a Solana program written in Rust using the Anchor framework.
+- `workflowId`: Unique identifier for the workflow
+- `tokenAmount`: Amount to transfer per interval
+- `interval`: Time between payments (in seconds/blocks)
+- `approvalsRequired`: Number of approvals needed to execute payments
+- `approvers`: Array of public keys authorized to approve
 
-#### Commands
+#### Approve Workflow
 
-You can use any normal anchor commands. Either move to the `anchor` directory and run the `anchor` command or prefix the
-command with `pnpm`, eg: `pnpm anchor`.
+Records an approval from an authorized approver.
 
-#### Sync the program id:
+#### Execute Payment
 
-Running this command will create a new keypair in the `anchor/target/deploy` directory and save the address to the
-Anchor config file and update the `declare_id!` macro in the `./src/lib.rs` file of the program.
+Executes the payment when due and sufficiently approved.
 
-You will manually need to update the constant in `anchor/lib/counter-exports.ts` to match the new program id.
+#### Cancel Workflow
 
-```shell
-pnpm anchor keys sync
-```
+Cancels an active workflow and returns funds to the creator.
 
-#### Build the program:
+## Security Considerations
 
-```shell
-pnpm anchor-build
-```
+- All funds are held in program-derived address (PDA) escrow accounts
+- Proper access control checks for all sensitive operations
+- Thorough input validation to prevent exploitation
 
-#### Start the test validator with the program deployed:
+## Future Enhancements
 
-```shell
-pnpm anchor-localnet
-```
+- Support for multiple token types in a single workflow
+- Variable payment amounts based on predefined conditions
+- Integration with off-chain data sources via oracles
+- Expanded approval rules (e.g., approval expiration, minimum threshold)
+- User interface for easy interaction with the contract
 
-#### Run the tests
+## Acknowledgments
 
-```shell
-pnpm anchor-test
-```
-
-#### Deploy to Devnet
-
-```shell
-pnpm anchor deploy --provider.cluster devnet
-```
-
-### web
-
-This is a React app that uses the Anchor generated client to interact with the Solana program.
-
-#### Commands
-
-Start the web app
-
-```shell
-pnpm dev
-```
-
-Build the web app
-
-```shell
-pnpm build
-```
+- Solana Foundation
+- Turbin3
+- Anchor Framework
